@@ -28,11 +28,16 @@ catkin_package(
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
+  rosbridgecpp
 )
+add_subdirectory(rosbridgecpp rosbridgecpp)
 
 add_library(${PROJECT_NAME}
   src/Actions.cpp
   src/PepperRobot.cpp
   src/Task.cpp
+  rosbridgecpp/rosbridge_ws_client.cpp
+
 )
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} rosbridgecpp)
