@@ -9,6 +9,7 @@
 #include <chrono>
 
 #include <std_msgs/String.h>
+#include <std_srvs/Empty.h>
 #include <geometry_msgs/PoseStamped.h>
 
 #include <nao_interaction_msgs/MotionInterpolate.h>
@@ -18,6 +19,9 @@
 
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 #include "tf2_ros/transform_listener.h"
+
+#include "rosbridge_ws_client.hpp"
+
 
 class PepperRobot
 {
@@ -63,10 +67,16 @@ public:
   void stopChrono() { time_stop_ = std::chrono::steady_clock::now(); }
   std::chrono::duration<double> getChrono() { return time_stop_ - time_start_; }
 
+  void launchSynchro(const std::string& ip_ws);
+  void waitSynchro();
+
 private:
 
   //void moveGripper(GripperState_e state);
   void lookAt(geometry_msgs::Vector3 point, double speed = 0.0);
+  bool callback_wait_service(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response);
+
+  std::atomic_bool free_;
 };
 
 #endif // PEPPER_DEMO_LIB_PR2ROBOT_H

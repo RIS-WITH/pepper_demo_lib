@@ -148,3 +148,28 @@ void PepperRobot::lookAt(geometry_msgs::Vector3 point, double speed)
 
   look_at_srv_.call(srv);
 }
+
+void PepperRobot::launchSynchro(const std::string& ip_addr)
+{
+  RosbridgeWsClient rbc(ip_addr);
+
+  rbc.addClient("service_advertiser");
+  rbc.callService("/synchro_action", {},{});
+}
+
+bool PepperRobot::callback_wait_service(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response)
+{
+  free_ = true;
+  return true;
+}
+
+void PepperRobot::waitSynchro()
+{
+  free_ = false;
+  ros::ServiceServer service = n_.advertiseService("/synchro_action",&PepperRobot::callback_wait_service, this);
+  while(!free_)
+  {
+    ROS_INFO("wait synchro");
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+  }
+}
