@@ -26,6 +26,7 @@ struct action_t
   std::string speak_str;
   int single_int;
   double single_double;
+  std::string ip_ws;
 };
 
 action_t createAction(const std::vector<std::vector<double>>& rarm_position, bool follow_hand = false, bool invert_hand = false, double speed = 0);
@@ -46,5 +47,8 @@ action_t createActionDelay(int delay_ms);
 
 action_t createActionStartChrono();
 action_t createActionStopChrono();
+
+action_t createActionLaunchSynchro(const std::string& ip_addr);
+action_t createActionWaitSynchro();
 
 #endif // PEPPER_DEMO_LIB_ACTIONS_H
