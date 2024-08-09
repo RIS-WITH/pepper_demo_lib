@@ -12,10 +12,10 @@
 #include <std_srvs/Empty.h>
 #include <geometry_msgs/PoseStamped.h>
 
-#include <nao_interaction_msgs/MotionInterpolate.h>
-#include <nao_interaction_msgs/String.h>
-#include <nao_interaction_msgs/Say.h>
-#include <nao_interaction_msgs/TrackerLookAt.h>
+#include "nao_interaction_msgs/MotionInterpolate.h"
+#include "nao_interaction_msgs/String.h"
+#include "nao_interaction_msgs/Say.h"
+#include "nao_interaction_msgs/TrackerLookAt.h"
 
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 #include "tf2_ros/transform_listener.h"

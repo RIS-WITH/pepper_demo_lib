@@ -17,7 +17,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES pepper_demo_lib
-#  CATKIN_DEPENDS nao_interaction_msgs roscpp
+  CATKIN_DEPENDS nao_interaction_msgs roscpp
 #  DEPENDS system_lib
 )
 
@@ -39,5 +39,5 @@ add_library(${PROJECT_NAME}
   rosbridgecpp/rosbridge_ws_client.cpp
 
 )
-target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})
-target_link_libraries(${PROJECT_NAME} rosbridgecpp)
+target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} rosbridgecpp)
+add_dependencies(${PROJECT_NAME} nao_interaction_msgs_generate_messages_cpp)
