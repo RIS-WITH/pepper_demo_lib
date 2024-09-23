@@ -10,6 +10,7 @@ PepperRobot::PepperRobot(bool real) : tf_listener_(tf_buffer_)
   tts_srv_ = n_.serviceClient<nao_interaction_msgs::Say>("naoqi_driver/tts/say");
   tts_anim_srv_ = n_.serviceClient<nao_interaction_msgs::Say>("/naoqi_driver/animated_speech/say");
   look_at_srv_ = n_.serviceClient<nao_interaction_msgs::TrackerLookAt>("/naoqi_driver/tracker/look_at");
+  nav_srv_ = n_.serviceClient<nao_interaction_msgs::GoToPose>("/naoqi_driver/motion/move_to");
 
   lang_ = "fr";
   std::cout << "PepperRobot is ready" << std::endl;
@@ -47,6 +48,26 @@ void PepperRobot::sayAnim(const std::string& txt)
   else
     srv.request.text = txt;
   tts_anim_srv_.call(srv);
+}
+
+void PepperRobot::moveFront(double dist)
+{
+  nao_interaction_msgs::GoToPose srv;
+  srv.request.pose.header.frame_id = "base_footprint";
+  srv.request.pose.pose.position.x = dist;
+  srv.request.pose.pose.position.y = 0;
+  srv.request.pose.pose.orientation.w = 1;
+  nav_srv_.call(srv);
+}
+
+void PepperRobot::moveRight(double dist)
+{
+  nao_interaction_msgs::GoToPose srv;
+  srv.request.pose.header.frame_id = "base_footprint";
+  srv.request.pose.pose.position.x = 0;
+  srv.request.pose.pose.position.y = -dist;
+  srv.request.pose.pose.orientation.w = 1;
+  nav_srv_.call(srv);
 }
 
 void PepperRobot::moveArm(const std::vector<std::vector<double>>& positions, bool right, double duration)

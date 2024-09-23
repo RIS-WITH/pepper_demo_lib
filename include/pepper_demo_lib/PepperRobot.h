@@ -16,6 +16,7 @@
 #include "nao_interaction_msgs/String.h"
 #include "nao_interaction_msgs/Say.h"
 #include "nao_interaction_msgs/TrackerLookAt.h"
+#include "nao_interaction_msgs/GoToPose.h"
 
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 #include "tf2_ros/transform_listener.h"
@@ -33,6 +34,7 @@ protected:
   ros::ServiceClient set_lang_srv_;
   ros::ServiceClient tts_srv_;
   ros::ServiceClient tts_anim_srv_;
+  ros::ServiceClient nav_srv_;
 
   tf2_ros::Buffer tf_buffer_; 
   tf2_ros::TransformListener tf_listener_;
@@ -59,6 +61,9 @@ public:
 
   void openHand() { /* TODO */ }
   void closeHand() { /* TODO */ }
+
+  void moveFront(double dist);
+  void moveRight(double dist);
 
   void moveArm(const std::vector<std::vector<double>>& positions, bool right = true, double duration = 1.1);
   void moveArms(const std::vector<std::vector<double>>& left, const std::vector<std::vector<double>>& right, double duration = 1.1);
