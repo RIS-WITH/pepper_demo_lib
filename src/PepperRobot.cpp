@@ -8,6 +8,7 @@ PepperRobot::PepperRobot(bool real) : tf_listener_(tf_buffer_)
 
   set_lang_srv_ = n_.serviceClient<nao_interaction_msgs::String>("naoqi_driver/tts/set_language");
   tts_srv_ = n_.serviceClient<nao_interaction_msgs::Say>("naoqi_driver/tts/say");
+  tts_anim_srv_ = n_.serviceClient<nao_interaction_msgs::Say>("/naoqi_driver/animated_speech/say");
   look_at_srv_ = n_.serviceClient<nao_interaction_msgs::TrackerLookAt>("/naoqi_driver/tracker/look_at");
 
   lang_ = "fr";
@@ -34,6 +35,18 @@ void PepperRobot::say(const std::string& txt)
   else
     srv.request.text = txt;
   tts_srv_.call(srv);
+}
+
+void PepperRobot::sayAnim(const std::string& txt)
+{
+  nao_interaction_msgs::Say srv;
+  if(lang_ == "en")
+    srv.request.text = txt;
+  else if(en2fr_.find(txt) != en2fr_.end())
+    srv.request.text = en2fr_[txt];
+  else
+    srv.request.text = txt;
+  tts_anim_srv_.call(srv);
 }
 
 void PepperRobot::moveArm(const std::vector<std::vector<double>>& positions, bool right, double duration)

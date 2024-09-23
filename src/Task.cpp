@@ -25,6 +25,8 @@ void executeAction(PepperRobot* robot, const action_t& action)
   }*/
   else if(action.type == "speak")
     robot->say(action.speak_str);
+  else if(action.type == "speakAnim")
+    robot->sayAnim(action.speak_str);
   else if(action.type == "delay")
     usleep(action.single_int * 1000);
   else if(action.type == "startChrono")
@@ -42,6 +44,8 @@ void executeAction(PepperRobot* robot, const action_t& action)
     else
       robot->lookHand(true);
   }*/
+  else
+    std::cout << "Action not yet supported" << std::endl;
 }
 
 void executeTask(PepperRobot* robot, const std::vector<action_t>& task)

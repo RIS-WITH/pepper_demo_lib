@@ -61,6 +61,14 @@ action_t createActionSpeak(const std::string& msg)
   return action;
 }
 
+action_t createActionSpeakAnim(const std::string& msg)
+{
+  action_t action;
+  action.type = "speakAnim";
+  action.speak_str = msg;
+  return action;
+}
+
 action_t createActionDelay(int delay_ms)
 {
   action_t action;

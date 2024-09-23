@@ -32,6 +32,7 @@ protected:
   ros::NodeHandle n_;
   ros::ServiceClient set_lang_srv_;
   ros::ServiceClient tts_srv_;
+  ros::ServiceClient tts_anim_srv_;
 
   tf2_ros::Buffer tf_buffer_; 
   tf2_ros::TransformListener tf_listener_;
@@ -54,6 +55,7 @@ public:
   void initPose();
 
   void say(const std::string& txt);
+  void sayAnim(const std::string& txt);
 
   void openHand() { /* TODO */ }
   void closeHand() { /* TODO */ }

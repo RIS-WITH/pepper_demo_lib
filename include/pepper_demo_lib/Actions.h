@@ -42,6 +42,7 @@ action_t createActionLookHand(bool invert);
 action_t createAction(int speak_sound);
 
 action_t createActionSpeak(const std::string& msg);
+action_t createActionSpeakAnim(const std::string& msg);
 
 action_t createActionDelay(int delay_ms);
 
