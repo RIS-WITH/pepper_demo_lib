@@ -57,7 +57,8 @@ action_t createActionTurn(double angle);
 action_t createActionStartChrono();
 action_t createActionStopChrono();
 
+action_t createActionSynchro(const std::string& ip_addr);
 action_t createActionLaunchSynchro(const std::string& ip_addr);
-action_t createActionWaitSynchro();
+action_t createActionWaitSynchro(const std::string& ip_addr);
 
 #endif // PEPPER_DEMO_LIB_ACTIONS_H

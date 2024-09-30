@@ -31,6 +31,9 @@ protected:
   ros::ServiceClient tts_anim_srv_;
   ros::ServiceClient nav_srv_;
 
+  ros::ServiceServer synchro_srv_;
+  std::atomic_bool free_;
+
   tf2_ros::Buffer tf_buffer_;
   tf2_ros::TransformListener tf_listener_;
 
@@ -72,15 +75,14 @@ public:
   void stopChrono() { time_stop_ = std::chrono::steady_clock::now(); }
   std::chrono::duration<double> getChrono() { return time_stop_ - time_start_; }
 
-  void launchSynchro(const std::string& ip_ws);
-  void waitSynchro();
+  void synchro(const std::string& ip_addr);
+  void launchSynchro(const std::string& ip_addr);
+  void waitSynchro(const std::string& ip_addr);
 
 private:
   // void moveGripper(GripperState_e state);
   void lookAt(geometry_msgs::Vector3 point, double speed = 0.0);
   bool callback_wait_service(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response);
-
-  std::atomic_bool free_;
 };
 
 #endif // PEPPER_DEMO_LIB_PR2ROBOT_H

@@ -1,6 +1,6 @@
 #include "pepper_demo_lib/PepperRobot.h"
 
-PepperRobot::PepperRobot(bool real) : tf_listener_(tf_buffer_)
+PepperRobot::PepperRobot(bool real) : tf_listener_(tf_buffer_), free_(false)
 {
   is_real_ = real;
 
@@ -11,6 +11,8 @@ PepperRobot::PepperRobot(bool real) : tf_listener_(tf_buffer_)
   tts_anim_srv_ = n_.serviceClient<nao_interaction_msgs::Say>("/naoqi_driver/animated_speech/say");
   look_at_srv_ = n_.serviceClient<nao_interaction_msgs::TrackerLookAt>("/naoqi_driver/tracker/look_at");
   nav_srv_ = n_.serviceClient<nao_interaction_msgs::GoToPose>("/naoqi_driver/motion/move_to");
+
+  synchro_srv_ = n_.advertiseService("/synchro_action", &PepperRobot::callback_wait_service, this);
 
   lang_ = "fr";
   std::cout << "PepperRobot is ready" << std::endl;
@@ -236,9 +238,20 @@ void PepperRobot::lookAt(geometry_msgs::Vector3 point, double speed)
   look_at_srv_.call(srv);
 }
 
+void PepperRobot::synchro(const std::string& ip_addr)
+{
+  if(ip_addr.empty() == false)
+  {
+    launchSynchro(ip_addr);
+    waitSynchro(ip_addr);
+  }
+}
+
 void PepperRobot::launchSynchro(const std::string& ip_addr)
 {
   RosbridgeWsClient rbc(ip_addr);
+
+  ROS_INFO("launchSynchro");
 
   rbc.addClient("service_advertiser");
   rbc.callService("/synchro_action", {}, {});
@@ -250,13 +263,15 @@ bool PepperRobot::callback_wait_service(std_srvs::Empty::Request& request, std_s
   return true;
 }
 
-void PepperRobot::waitSynchro()
+void PepperRobot::waitSynchro(const std::string& ip_addr)
 {
-  free_ = false;
-  ros::ServiceServer service = n_.advertiseService("/synchro_action", &PepperRobot::callback_wait_service, this);
-  while(!free_)
+  if(ip_addr.empty() == false)
   {
-    ROS_INFO("wait synchro");
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    while(!free_)
+    {
+      ROS_INFO("wait synchro");
+      std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    }
+    free_ = false;
   }
 }

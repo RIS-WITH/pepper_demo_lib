@@ -56,7 +56,9 @@ void executeAction(PepperRobot* robot, const action_t& action)
   else if(action.type == "launchSynchro")
     robot->launchSynchro(action.ip_ws);
   else if(action.type == "waitSynchro")
-    robot->waitSynchro();
+    robot->waitSynchro(action.ip_ws);
+  else if(action.type == "synchro")
+    robot->synchro(action.ip_ws);
   /*else if(action.type == "lookHand")
   {
     if(action.invert_hand)
