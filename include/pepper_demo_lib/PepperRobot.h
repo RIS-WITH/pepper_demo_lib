@@ -61,6 +61,8 @@ public:
   void move(double dist_x, double dist_y);
   void turn(double angle);
 
+  void resetBody();
+
   void moveArm(const std::vector<std::vector<double>>& positions, bool right = true, double duration = 1.1);
   void moveArms(const std::vector<std::vector<double>>& left, const std::vector<std::vector<double>>& right, double duration = 1.1);
 

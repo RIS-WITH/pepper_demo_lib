@@ -47,6 +47,8 @@ action_t createActionSpeakAnim(const std::string& msg);
 
 action_t createActionDelay(int delay_ms);
 
+action_t createActionResetBody();
+
 action_t createActionMoveFront(double dist);
 action_t createActionMoveRight(double dist);
 action_t createActionMove(double dist_x, double dist_y);

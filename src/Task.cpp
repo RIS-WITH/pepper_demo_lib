@@ -11,6 +11,10 @@ void executeAction(PepperRobot* robot, const action_t& action)
   {
     robot->moveArms(action.larm_position, action.rarm_position, action.single_double);
   }
+  else if(action.type == "resetBody")
+  {
+    robot->resetBody();
+  }
   else if(action.type == "moveFront")
   {
     robot->moveFront(action.single_double);

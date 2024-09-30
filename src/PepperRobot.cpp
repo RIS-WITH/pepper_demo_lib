@@ -98,6 +98,31 @@ void PepperRobot::turn(double angle)
   nav_srv_.call(srv);
 }
 
+void PepperRobot::resetBody()
+{
+  std::vector<float> positions = {0.0193678308, -0.204438269,
+                                  1.24219799, 0.0365650989,
+                                  -1.11843324, -0.526670039,
+                                  -1.03511024, 0.61011523,
+                                  -2.51969592e-08, -0.0573792122,
+                                  -0.0442125686, 1.31760716,
+                                  -0.0351500735, 1.37310743,
+                                  0.613771081, 0.806987405,
+                                  0.688877523, 0, 0, 0};
+  nao_interaction_msgs::MotionInterpolate srv;
+  srv.request.names = {"Body"};
+  srv.request.angles.resize(positions.size());
+  srv.request.times.resize(positions.size());
+  for(size_t i = 0; i < positions.size(); i++)
+  {
+    srv.request.angles[i].values.push_back(positions[i]);
+    srv.request.times[i].values.push_back(1.f);
+  }
+  srv.request.is_absolute = true;
+
+  interpolate_srv_.call(srv);
+}
+
 void PepperRobot::moveArm(const std::vector<std::vector<double>>& positions, bool right, double duration)
 {
   nao_interaction_msgs::MotionInterpolate srv;

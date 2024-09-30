@@ -77,6 +77,13 @@ action_t createActionDelay(int delay_ms)
   return action;
 }
 
+action_t createActionResetBody()
+{
+  action_t action;
+  action.type = "resetBody";
+  return action;
+}
+
 action_t createActionMoveFront(double dist)
 {
   action_t action;
