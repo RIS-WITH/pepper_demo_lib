@@ -1,28 +1,23 @@
 #ifndef PEPPER_DEMO_LIB_PR2ROBOT_H
 #define PEPPER_DEMO_LIB_PR2ROBOT_H
 
-#include "pepper_demo_lib/Types.h"
-
-#include <condition_variable>
-#include <mutex>
-#include <thread>
 #include <chrono>
-
+#include <condition_variable>
+#include <geometry_msgs/PoseStamped.h>
+#include <mutex>
 #include <std_msgs/String.h>
 #include <std_srvs/Empty.h>
-#include <geometry_msgs/PoseStamped.h>
-
-#include "nao_interaction_msgs/MotionInterpolate.h"
-#include "nao_interaction_msgs/String.h"
-#include "nao_interaction_msgs/Say.h"
-#include "nao_interaction_msgs/TrackerLookAt.h"
-#include "nao_interaction_msgs/GoToPose.h"
-
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
-#include "tf2_ros/transform_listener.h"
+#include <thread>
 
+#include "nao_interaction_msgs/GoToPose.h"
+#include "nao_interaction_msgs/MotionInterpolate.h"
+#include "nao_interaction_msgs/Say.h"
+#include "nao_interaction_msgs/String.h"
+#include "nao_interaction_msgs/TrackerLookAt.h"
+#include "pepper_demo_lib/Types.h"
 #include "rosbridge_ws_client.hpp"
-
+#include "tf2_ros/transform_listener.h"
 
 class PepperRobot
 {
@@ -36,7 +31,7 @@ protected:
   ros::ServiceClient tts_anim_srv_;
   ros::ServiceClient nav_srv_;
 
-  tf2_ros::Buffer tf_buffer_; 
+  tf2_ros::Buffer tf_buffer_;
   tf2_ros::TransformListener tf_listener_;
 
   std::string result_;
@@ -50,7 +45,6 @@ protected:
   std::map<std::string, std::string> en2fr_;
 
 public:
-
   PepperRobot(bool real = true);
   ~PepperRobot();
 
@@ -64,6 +58,8 @@ public:
 
   void moveFront(double dist);
   void moveRight(double dist);
+  void move(double dist_x, double dist_y);
+  void turn(double angle);
 
   void moveArm(const std::vector<std::vector<double>>& positions, bool right = true, double duration = 1.1);
   void moveArms(const std::vector<std::vector<double>>& left, const std::vector<std::vector<double>>& right, double duration = 1.1);
@@ -78,8 +74,7 @@ public:
   void waitSynchro();
 
 private:
-
-  //void moveGripper(GripperState_e state);
+  // void moveGripper(GripperState_e state);
   void lookAt(geometry_msgs::Vector3 point, double speed = 0.0);
   bool callback_wait_service(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response);
 

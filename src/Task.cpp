@@ -19,6 +19,14 @@ void executeAction(PepperRobot* robot, const action_t& action)
   {
     robot->moveRight(action.single_double);
   }
+  else if(action.type == "move")
+  {
+    robot->move(action.single_double, action.second_double);
+  }
+  else if(action.type == "turn")
+  {
+    robot->turn(action.single_double);
+  }
   else if(action.type == "hand")
   {
     if(action.hand == hand_open)

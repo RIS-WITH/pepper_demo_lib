@@ -93,6 +93,23 @@ action_t createActionMoveRight(double dist)
   return action;
 }
 
+action_t createActionMove(double dist_x, double dist_y)
+{
+  action_t action;
+  action.type = "move";
+  action.single_double = dist_x;
+  action.second_double = dist_y;
+  return action;
+}
+
+action_t createActionTurn(double angle)
+{
+  action_t action;
+  action.type = "turn";
+  action.single_double = angle;
+  return action;
+}
+
 action_t createActionStartChrono()
 {
   action_t action;

@@ -17,13 +17,16 @@ PepperRobot::PepperRobot(bool real) : tf_listener_(tf_buffer_)
 }
 
 PepperRobot::~PepperRobot()
-{}
+{
+}
 
 void PepperRobot::initPose()
 {
   closeHand();
-  moveArms({{ 1.242437720298767, 0.036568351089954376, -1.1184180974960327, -0.5266309380531311, -1.0351097583770752 }}, 
-           {{ 1.3179131746292114, -0.03515475615859032, 1.3730974197387695, 0.6137155294418335, 0.8069871068000793 }}, 2);
+  moveArms({
+             {1.242437720298767, 0.036568351089954376, -1.1184180974960327, -0.5266309380531311, -1.0351097583770752}
+  },
+           {{1.3179131746292114, -0.03515475615859032, 1.3730974197387695, 0.6137155294418335, 0.8069871068000793}}, 2);
 }
 
 void PepperRobot::say(const std::string& txt)
@@ -67,6 +70,31 @@ void PepperRobot::moveRight(double dist)
   srv.request.pose.pose.position.x = 0;
   srv.request.pose.pose.position.y = -dist;
   srv.request.pose.pose.orientation.w = 1;
+  nav_srv_.call(srv);
+}
+
+void PepperRobot::move(double dist_x, double dist_y)
+{
+  nao_interaction_msgs::GoToPose srv;
+  srv.request.pose.header.frame_id = "base_footprint";
+  srv.request.pose.pose.position.x = dist_x;
+  srv.request.pose.pose.position.y = -dist_y;
+  srv.request.pose.pose.orientation.w = 1;
+  nav_srv_.call(srv);
+}
+
+void PepperRobot::turn(double angle)
+{
+  tf2::Quaternion quaternion;
+  quaternion.setRPY(0, 0, angle * M_PI / 180.);
+  quaternion = quaternion.normalize();
+
+  nao_interaction_msgs::GoToPose srv;
+  srv.request.pose.header.frame_id = "base_footprint";
+  srv.request.pose.pose.position.x = 0;
+  srv.request.pose.pose.position.y = 0;
+  srv.request.pose.pose.orientation.z = quaternion.z();
+  srv.request.pose.pose.orientation.w = quaternion.w();
   nav_srv_.call(srv);
 }
 
@@ -161,8 +189,8 @@ void PepperRobot::setLang(const std::string& lang)
 {
   pr2_controllers_msgs::Pr2GripperCommandGoal gripper_goal;
   gripper_goal.command.position = state == gripper_open ? 0.08 : 0.0;
-  gripper_goal.command.max_effort = state == gripper_open ? -1.0 : 50.0;  
-  
+  gripper_goal.command.max_effort = state == gripper_open ? -1.0 : 50.0;
+
   ROS_INFO("Sending gripper goal");
   gripper_client_->sendGoal(gripper_goal);
   gripper_client_->waitForResult();
@@ -188,7 +216,7 @@ void PepperRobot::launchSynchro(const std::string& ip_addr)
   RosbridgeWsClient rbc(ip_addr);
 
   rbc.addClient("service_advertiser");
-  rbc.callService("/synchro_action", {},{});
+  rbc.callService("/synchro_action", {}, {});
 }
 
 bool PepperRobot::callback_wait_service(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response)
@@ -200,7 +228,7 @@ bool PepperRobot::callback_wait_service(std_srvs::Empty::Request& request, std_s
 void PepperRobot::waitSynchro()
 {
   free_ = false;
-  ros::ServiceServer service = n_.advertiseService("/synchro_action",&PepperRobot::callback_wait_service, this);
+  ros::ServiceServer service = n_.advertiseService("/synchro_action", &PepperRobot::callback_wait_service, this);
   while(!free_)
   {
     ROS_INFO("wait synchro");

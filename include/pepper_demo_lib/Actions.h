@@ -26,6 +26,7 @@ struct action_t
   std::string speak_str;
   int single_int;
   double single_double;
+  double second_double;
   std::string ip_ws;
 };
 
@@ -48,6 +49,8 @@ action_t createActionDelay(int delay_ms);
 
 action_t createActionMoveFront(double dist);
 action_t createActionMoveRight(double dist);
+action_t createActionMove(double dist_x, double dist_y);
+action_t createActionTurn(double angle);
 
 action_t createActionStartChrono();
 action_t createActionStopChrono();
